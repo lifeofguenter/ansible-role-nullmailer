@@ -1,13 +1,15 @@
 ---
 
-dist: xenial
+dist: focal
+language: minimal
 
-language: python
-python: "3.7"
+# Install ansible
+addons:
+  apt:
+    packages:
+      - ansible
 
 install:
-  - pip install -U ansible
-
   # Check ansible version
   - ansible --version
 

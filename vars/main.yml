@@ -1,0 +1,3 @@
+---
+
+nullmailer_default_release: '{{ ansible_distribution_release }}'
