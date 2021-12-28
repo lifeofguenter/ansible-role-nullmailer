@@ -1,6 +1,8 @@
 ---
+
 galaxy_info:
   role_name: nullmailer
+  namespace: lifeofguenter
   author: Gunter Grodotzki
   description: >
     Install and configure nullmailer, a simple relay-only mail transport agent.
@@ -18,7 +20,7 @@ galaxy_info:
         - bullseye
         - buster
         - stretch
-  categories:
+  galaxy_tags:
     - system
     - email
 dependencies: []
