@@ -1,8 +1,8 @@
 ---
-# handlers file for nullmailer
-- name: restart_nullmailer
+
+- name: Restart_nullmailer
   ansible.builtin.systemd:
     name: nullmailer
     state: restarted
-    enabled: yes
-  become: yes
+    enabled: true
+  become: true

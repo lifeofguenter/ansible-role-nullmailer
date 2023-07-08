@@ -1,23 +1,22 @@
 ---
-# tasks file for nullmailer
-#
-- name: prepare config dir
-  file:
+
+- name: Prepare config dir
+  ansible.builtin.file:
     path: /etc/nullmailer
     state: directory
-    mode: 0755
-  become: yes
+    mode: '0755'
+  become: true
 
-- name: configure generic mail settings
-  template:
+- name: Configure generic mail settings
+  ansible.builtin.template:
     src: mailname.j2
     dest: /etc/mailname
     mode: '644'
-  notify: restart_nullmailer
-  become: yes
+  notify: Restart_nullmailer
+  become: true
 
-- name: configure nullmailer
-  template:
+- name: Configure nullmailer
+  ansible.builtin.template:
     src: '{{ item.name + ".j2" }}'
     dest: /etc/nullmailer/{{ item.name }}
     mode: '{{ item.mode | default("644") }}'
@@ -34,13 +33,13 @@
       group: mail
       mode: '640'
     - name: sendtimeout
-  notify: restart_nullmailer
-  become: yes
+  notify: Restart_nullmailer
+  become: true
 
-- name: install
-  apt:
+- name: Install
+  ansible.builtin.apt:
     name: nullmailer
     default_release: '{{ nullmailer_default_release }}'
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
-  become: yes
+  become: true

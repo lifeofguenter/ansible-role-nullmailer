@@ -3,23 +3,23 @@
 galaxy_info:
   role_name: nullmailer
   namespace: lifeofguenter
-  author: Gunter Grodotzki
+  author: Günter Grodotzki
   description: >
     Install and configure nullmailer, a simple relay-only mail transport agent.
     Homepage http://untroubled.org/nullmailer/
   license: GPLv3
   min_ansible_version: '2.10'
   platforms:
-    - name: Ubuntu
-      versions:
-        - focal
-        - bionic
-        - xenial
     - name: Debian
       versions:
+        - bookworm
         - bullseye
         - buster
-        - stretch
+    - name: Ubuntu
+      versions:
+        - jammy
+        - focal
+        - bionic
   galaxy_tags:
     - system
     - email

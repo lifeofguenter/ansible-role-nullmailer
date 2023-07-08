@@ -1,16 +1,10 @@
 ---
 
-- name: add debian backports
-  apt_repository:
+- name: Add debian backports
+  ansible.builtin.apt_repository:
     repo: deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main contrib non-free
-  become: yes
-  when:
-    - ansible_distribution == 'Debian'
-    - ansible_distribution_release == 'stretch'
+  become: true
 
-- name: use debian backports
+- name: Use debian backports
   ansible.builtin.set_fact:
     nullmailer_default_release: '{{ ansible_distribution_release }}-backports'
-  when:
-    - ansible_distribution == 'Debian'
-    - ansible_distribution_release == 'stretch'

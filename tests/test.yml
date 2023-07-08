@@ -1,5 +1,8 @@
 ---
 
 - hosts: localhost
-  roles:
-    - ansible-role-nullmailer
+
+  tasks:
+    - name: Import project role
+      ansible.builtin.import_role:
+        name: project
