@@ -2,7 +2,7 @@
 
 - name: Add debian backports
   ansible.builtin.apt_repository:
-    repo: deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main contrib non-free
+    repo: deb http://archive.debian.org/debian {{ ansible_distribution_release }}-backports main contrib non-free
   become: true
 
 - name: Use debian backports
