@@ -1,11 +1,5 @@
 ---
 
-- name: Import backports.yml
-  ansible.builtin.import_tasks: backports.yml
-  when:
-    - ansible_distribution == 'Debian'
-    - ansible_distribution_release == 'stretch'
-
 - name: Import nullmailer.yml
   ansible.builtin.import_tasks: nullmailer.yml
   when:
