@@ -59,4 +59,8 @@ nullmailer_sendtimeout: 3600
 
 # /etc/mailname: The fully-qualifiled host name of the computer running
 # nullmailer. Defaults to the literal name me.
-nullmailer_mailname: '{{ nullmailer_me }}'
+nullmailer_mailname:        '{{ nullmailer_me }}'
+
+# /etc/nullmailer/allmailfrom: Use the specified envelope From address
+# unconditionally.
+#nullmailer_allmailfrom:     '{{ nullmailer_me }}'

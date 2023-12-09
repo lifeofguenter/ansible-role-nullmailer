@@ -36,6 +36,16 @@
   notify: Restart_nullmailer
   become: true
 
+- name: configure optional allmailfrom
+  ansible.builtin.template:
+    src: 'allmailfrom.j4'
+    dest: /etc/nullmailer/{{ nullmailer_allmailfrom }}
+    mode: '{{ item.mode | default("644") }}'
+    owner: '{{ item.owner | default("root") }}'
+    group: '{{ item.group | default("root") }}'
+  notify: restart_nullmailer
+  become: yes
+
 - name: Install
   ansible.builtin.apt:
     name: nullmailer
