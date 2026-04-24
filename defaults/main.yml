@@ -27,18 +27,18 @@ nullmailer_remotes: []
 
 # according to nullmailer docs, me should be equal to hostname
 # but IMHO this must be fully qualified
-nullmailer_me: "{{ ansible_fqdn }}"
+nullmailer_me: "{{ ansible_facts.fqdn }}"
 
 # The content of this file is appended to any host name that does not contain
 # a period (except localhost), including defaulthost and idhost.  Defaults to
 # the value of the /etc/mailname system file, if it exists, otherwise the
 # literal name defaultdomain.
-nullmailer_defaultdomain: "{{ ansible_domain }}"
+nullmailer_defaultdomain: "{{ ansible_facts.domain }}"
 
 # The content of this file is appended to any address that is missing a host
 # name. Defaults to the value of the /etc/mailname system file, if it exists,
 # otherwise the literal name defaulthost.
-nullmailer_defaulthost: "{{ ansible_fqdn }}"
+nullmailer_defaulthost: "{{ ansible_facts.fqdn }}"
 
 # Sets the environment variable $HELOHOST which is used by the SMTP protocol
 # module to set the parameter given to the HELO command.
