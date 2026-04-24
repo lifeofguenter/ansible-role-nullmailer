@@ -3,3 +3,5 @@
 .attach_pid*
 /.idea/
 /.env
+
+/.ansible/
