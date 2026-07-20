@@ -1,0 +1,9 @@
+[Unit]
+Description=Kill wedged nullmailer delivery children
+After=nullmailer.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/nullmailer-watchdog --fix
+SuccessExitStatus=0 1
+Environment=MAX_CHILD_AGE={{ nullmailer_sendtimeout | int + 120 }}

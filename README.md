@@ -47,8 +47,19 @@ to smtp, and may be followed by command-line arguments for that module.
 * nullmailer_helohost:          nullmailer_me
 * nullmailer_idhost:            nullmailer_defaulthost
 * nullmailer_pausetime:         60
-* nullmailer_sendtimeout:       3600
+* nullmailer_sendtimeout:       300
 * nullmailer_mailname:          nullmailer_me
+
+
+Watchdog
+--------
+
+The role installs `/usr/local/bin/nullmailer-watchdog` plus a systemd timer
+(`nullmailer-watchdog.timer`) that runs every minute. It detects nullmailer
+delivery children wedged on a silently-dropped SMTP socket and kills them so
+`nullmailer-send` retries instead of stalling the queue. A child is considered
+wedged once it is older than `MAX_CHILD_AGE`, which the role sets to
+`nullmailer_sendtimeout + 120` seconds.
 
 
 Dependencies
