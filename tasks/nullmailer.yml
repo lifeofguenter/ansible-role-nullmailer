@@ -1,5 +1,18 @@
 ---
 
+# Install first: the package postinst writes /etc/nullmailer/{adminaddr,remotes,
+# defaultdomain,...} and /etc/mailname from debconf (and forces remotes to
+# mail:mail 0600). It must run before we template our own config, otherwise the
+# postinst clobbers our files on first install and every later converge re-applies
+# them (reported as changed).
+- name: Install
+  ansible.builtin.apt:
+    name: nullmailer
+    default_release: '{{ nullmailer_default_release }}'
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+
 - name: Prepare config dir
   ansible.builtin.file:
     path: /etc/nullmailer
@@ -48,14 +61,6 @@
   when:
     - nullmailer_allmailfrom is defined
     - nullmailer_allmailfrom | length > 0
-
-- name: Install
-  ansible.builtin.apt:
-    name: nullmailer
-    default_release: '{{ nullmailer_default_release }}'
-    update_cache: true
-    cache_valid_time: 3600
-  become: true
 
 - name: Install watchdog script
   ansible.builtin.copy:
