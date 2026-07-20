@@ -1,5 +1,18 @@
 ---
 
+# Install first: the package postinst writes /etc/nullmailer/{adminaddr,remotes,
+# defaultdomain,...} and /etc/mailname from debconf (and forces remotes to
+# mail:mail 0600). It must run before we template our own config, otherwise the
+# postinst clobbers our files on first install and every later converge re-applies
+# them (reported as changed).
+- name: Install
+  ansible.builtin.apt:
+    name: nullmailer
+    default_release: '{{ nullmailer_default_release }}'
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+
 - name: Prepare config dir
   ansible.builtin.file:
     path: /etc/nullmailer
@@ -9,15 +22,15 @@
 
 - name: Configure generic mail settings
   ansible.builtin.template:
-    src: mailname.j2
+    src: mailname
     dest: /etc/mailname
     mode: '644'
-  notify: Restart_nullmailer
+  notify: nullmailer_restart
   become: true
 
 - name: Configure nullmailer
   ansible.builtin.template:
-    src: '{{ item.name + ".j2" }}'
+    src: '{{ item.name }}'
     dest: /etc/nullmailer/{{ item.name }}
     mode: '{{ item.mode | default("644") }}'
     owner: '{{ item.owner | default("root") }}'
@@ -33,26 +46,54 @@
       group: mail
       mode: '640'
     - name: sendtimeout
-  notify: Restart_nullmailer
+  notify: nullmailer_restart
   become: true
 
 - name: Configure allmailfrom
   ansible.builtin.template:
-    src: allmailfrom.j2
+    src: allmailfrom
     dest: /etc/nullmailer/allmailfrom
     mode: '0644'
     owner: root
     group: root
-  notify: Restart_nullmailer
+  notify: nullmailer_restart
   become: true
   when:
     - nullmailer_allmailfrom is defined
     - nullmailer_allmailfrom | length > 0
 
-- name: Install
-  ansible.builtin.apt:
-    name: nullmailer
-    default_release: '{{ nullmailer_default_release }}'
-    update_cache: true
-    cache_valid_time: 3600
+- name: Install watchdog script
+  ansible.builtin.copy:
+    src: nullmailer-watchdog.sh
+    dest: /usr/local/bin/nullmailer-watchdog
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
+
+- name: Install watchdog service unit
+  ansible.builtin.template:
+    src: nullmailer-watchdog.service
+    dest: /etc/systemd/system/nullmailer-watchdog.service
+    mode: '0644'
+    owner: root
+    group: root
+  notify: nullmailer_daemon_reload
+  become: true
+
+- name: Install watchdog timer unit
+  ansible.builtin.copy:
+    src: nullmailer-watchdog.timer
+    dest: /etc/systemd/system/nullmailer-watchdog.timer
+    mode: '0644'
+    owner: root
+    group: root
+  notify: nullmailer_daemon_reload
+  become: true
+
+- name: Enable watchdog timer
+  ansible.builtin.systemd:
+    name: nullmailer-watchdog.timer
+    enabled: true
+    state: started
   become: true
